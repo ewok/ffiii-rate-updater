@@ -1,0 +1,38 @@
+/*
+Copyright © 2025 Artur Taranchiev <artur.taranchiev@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+package exchange
+
+import "strings"
+
+type Currency struct {
+    Code string
+}
+
+func (c Currency) String() string {
+    return string(c.Code)
+}
+
+func (c Currency) GetLCode() string {
+    return strings.ToLower(string(c.Code))
+}
+
+func (c Currency) GetCode() string {
+    return strings.ToUpper(string(c.Code))
+}
+
+func NewCurrency(code string) Currency {
+    return Currency{Code: strings.ToUpper(code)}
+}

@@ -1,0 +1,8 @@
+currencies:
+  - USD
+  - EUR
+  - KGS
+  - USDT
+firefly:
+  api_url: "https://api.firefly.com/api"
+  api_key: "your_api_key_here"
