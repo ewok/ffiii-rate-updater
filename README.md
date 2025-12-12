@@ -18,6 +18,8 @@ A command-line tool to update exchange rates in Firefly III.
 
 The tool levarages [ Free Cuurency Exchange Rates API ](https://github.com/fawazahmed0/exchange-api) to fetch the latest exchange rates, and updates Firefly III accordingly.
 
+List of supported currencies can be found [here(Including Cryptocurrencies)](https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json).
+
 ## Features
 
 - Fetches exchange rates for multiple currencies.
@@ -37,6 +39,7 @@ This will generate an executable named `ffiii-rate-updater`.
 ## Usage
 
 ### CLI
+
 To use the tool, execute the following command in your terminal:
 
 ```sh
@@ -46,6 +49,7 @@ To use the tool, execute the following command in your terminal:
 Replace `/path/to/config.yaml` with the path to your configuration file.
 
 Default paths for the config file are:
+
 - Current directory: `./config.yaml`
 - User home directory: `~/.ffiii-rate-updater.yaml`
 - User config directory: `~/.config/ffiii-rate-updater/config`
@@ -56,7 +60,6 @@ You can pass additional flags to specify currencies, Firefly API key, and firefl
 ```sh
 ./ffiii-rate-updater init-config -d 2025-01-01 -c USD,EUR -k YOUR_API_KEY -u https://your-firefly-instance.com/api/v1
 ```
-
 
 ### From Docker or docker-compose
 
@@ -92,10 +95,10 @@ To initialize a sample configuration file, run:
 The new configuration file will be created at `./config.yaml`.
 
 You can also specify currencies, API key, and API URL directly when initializing the config:
+
 ```sh
 ./ffiii-rate-updater init-config -c USD,EUR -k YOUR_API_KEY -u https://your-firefly-instance.com/api/
 ```
-
 
 ## Planning
 
