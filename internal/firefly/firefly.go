@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -52,7 +51,6 @@ func (api *Api) SendExchangeRates(rate float64, fromCurrency string, toCurrency 
 	}
 
 	endpoint := fmt.Sprintf(ExchangeRateTemplate, api.Config.ApiUrl)
-	log.Printf("Sending exchange rate to %s", endpoint)
 
 	body, err := json.Marshal(payload)
 	if err != nil {
@@ -77,6 +75,5 @@ func (api *Api) SendExchangeRates(rate float64, fromCurrency string, toCurrency 
 		return fmt.Errorf("failed to send exchange rate: %s", resp.Status)
 	}
 
-	log.Println("Exchange rate sent successfully")
 	return nil
 }

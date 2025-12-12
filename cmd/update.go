@@ -50,7 +50,6 @@ var updateCmd = &cobra.Command{
 		}
 
 		exchangeApi := exchange.NewApi(currencies, viper.GetString("date"))
-		log.Printf("Fetching exchange rate for %s/%s", currencies[0], currencies[1])
 
 		fireflyApi := firefly.NewApi(firefly.ApiConfig{
 			ApiKey: apiKey,
