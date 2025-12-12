@@ -49,11 +49,15 @@ var updateCmd = &cobra.Command{
 			return fmt.Errorf("firefly API URL is not set")
 		}
 
-		exchangeApi := exchange.NewApi(currencies, viper.GetString("date"))
+		exchangeApi, err := exchange.NewApi(currencies, viper.GetString("date"))
+		if err != nil {
+			return fmt.Errorf("failed to initialize exchange API: %v", err)
+		}
 
 		fireflyApi := firefly.NewApi(firefly.ApiConfig{
-			ApiKey: apiKey,
-			ApiUrl: apiUrl,
+			ApiKey:         apiKey,
+			ApiUrl:         apiUrl,
+			TimeoutSeconds: 10,
 		})
 
 		// Send all exchange variants between the provided currencies

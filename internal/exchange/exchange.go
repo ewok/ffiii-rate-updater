@@ -21,6 +21,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 )
 
 type Api struct {
@@ -33,7 +34,16 @@ type ApiResponse struct {
 	Rates map[string]float64
 }
 
-func NewApi(rawCurrencies []string, date string) *Api {
+// NewApi creates a new Api instance with exchange rates for the specified currencies and date.
+//
+// Parameters:
+//   - rawCurrencies: a slice of currency codes (e.g., "USD", "EUR") for which to fetch exchange rates.
+//   - date: the date (in string format, e.g., "2024-06-01") for which to retrieve the exchange rates.
+//
+// Returns:
+//
+//	A pointer to an Api struct initialized with the requested exchange rates.
+func NewApi(rawCurrencies []string, date string) (*Api, error) {
 
 	api := Api{
 		Config: GetApiConfig(),
@@ -48,27 +58,38 @@ func NewApi(rawCurrencies []string, date string) *Api {
 	// Initialize exchange rates
 	rates, err := api.getExchangeRates(exCurrencies, date)
 	if err != nil {
-		log.Fatalf("Error initializing API rates: %v", err)
+		return nil, fmt.Errorf("error initializing API rates: %v", err)
 	}
 
 	api.Rates = rates
 
-	return &api
+	return &api, nil
 }
 
+// GetRate returns the exchange rate for the given currency pair (from, to).
+// It returns a Rate struct and an error if the rate for the specified pair is not found.
+// Parameters:
+//   - from: the source currency code (e.g., "USD")
+//   - to: the target currency code (e.g., "EUR")
+//
+// Returns:
+//   - Rate: the exchange rate information for the specified pair
+//   - error: an error if the rate is not found, otherwise nil
 func (api *Api) GetRate(from string, to string) (Rate, error) {
 
 	var rate Rate
 
+	found := false
 	pair := Pair{From: NewCurrency(from), To: NewCurrency(to)}
 	for _, r := range api.Rates {
 		if r.Pair == pair {
 			rate = r
+			found = true
 			break
 		}
 	}
 
-	if rate.Pair.From == NewCurrency("") || rate.Pair.To == NewCurrency("") {
+	if !found {
 		return Rate{}, fmt.Errorf("rate not found for pair %s/%s", from, to)
 	}
 
@@ -119,7 +140,7 @@ func (api *Api) fetchRates(currency string, date string) (response ApiResponse, 
 		return ApiResponse{}, err
 	}
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: time.Duration(api.Config.TimeoutSeconds) * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return ApiResponse{}, err

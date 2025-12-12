@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,12 @@ limitations under the License.
 */
 package firefly
 
+// ApiConfig holds configuration for the Firefly III API.
 type ApiConfig struct {
-    ApiKey       string
-    ApiUrl       string
+	// ApiKey is the API key used for authentication.
+	ApiKey string
+	// ApiUrl is the base URL of the Firefly III API.
+	ApiUrl string
+	// TimeoutSeconds specifies the timeout for API requests in seconds.
+	TimeoutSeconds int
 }

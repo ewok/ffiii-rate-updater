@@ -27,16 +27,34 @@ import (
 // const ExchangeRateByDateTemplate = "https://%s/v1/exchange-rates/by-date/%s"
 const ExchangeRateTemplate = "%s/exchange-rates"
 
+// ApiConfig holds configuration for the Firefly III API.
 type Api struct {
+	// Config contains the API configuration details.
 	Config ApiConfig
 }
 
+// NewApi creates a new Api instance with the provided configuration.
+// Parameters:
+//   - config: an ApiConfig struct containing the API configuration details.
+//
+// Returns:
+//   - A pointer to an Api struct initialized with the provided configuration.
 func NewApi(config ApiConfig) *Api {
 	return &Api{
 		Config: config,
 	}
 }
 
+// SendExchangeRates sends the exchange rate data to the Firefly API.
+//
+// Parameters:
+//   - rate: the exchange rate value to be sent.
+//   - fromCurrency: the source currency code (e.g., "USD").
+//   - toCurrency: the target currency code (e.g., "EUR").
+//   - date: the date for which the exchange rate is applicable (in "YYYY-MM-DD" format). If empty, the current date is used.
+//
+// Returns:
+//   - An error if the operation fails; otherwise, nil.
 func (api *Api) SendExchangeRates(rate float64, fromCurrency string, toCurrency string, date string) error {
 
 	if date == "" {
@@ -64,7 +82,7 @@ func (api *Api) SendExchangeRates(rate float64, fromCurrency string, toCurrency 
 	req.Header.Set("Content-Type", "application/vnd.api+json")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", api.Config.ApiKey))
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: time.Duration(api.Config.TimeoutSeconds) * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to send request: %v", err)
@@ -72,7 +90,7 @@ func (api *Api) SendExchangeRates(rate float64, fromCurrency string, toCurrency 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-		return fmt.Errorf("failed to send exchange rate: %s", resp.Status)
+		return fmt.Errorf("failed to send exchange rate: %d", resp.StatusCode)
 	}
 
 	return nil
