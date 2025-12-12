@@ -50,6 +50,14 @@ Default paths for the config file are:
 - User home directory: `~/.ffiii-rate-updater.yaml`
 - User config directory: `~/.config/ffiii-rate-updater/config`
 
+The configuration file is optional.
+You can pass additional flags to specify currencies, Firefly API key, and firefly API URL directly from the command line:
+
+```sh
+./ffiii-rate-updater init-config -d 2025-01-01 -c USD,EUR -k YOUR_API_KEY -u https://your-firefly-instance.com/api/
+```
+
+
 ### From Docker or docker-compose
 
 TBD
@@ -75,6 +83,26 @@ currencies:
   - JPY
 ```
 
+To initialize a sample configuration file, run:
+
+```sh
+./ffiii-rate-updater init-config
+```
+
+The new configuration file will be created at `./config.yaml`.
+
+You can also specify currencies, API key, and API URL directly when initializing the config:
+```sh
+./ffiii-rate-updater init-config -c USD,EUR -k YOUR_API_KEY -u https://your-firefly-instance.com/api/
+```
+
+
+## Planning
+
+- Implement fallback configuration for fetching exchange rates from alternative sources.
+- Add Docker and docker-compose support for easier deployment.
+- Enhance error handling and logging.
+- Add tests for better reliability.
 
 ## License
 

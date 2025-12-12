@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,32 +26,30 @@ import (
 	"ffiii-rate-updater/internal/firefly"
 )
 
-var date string
-
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Fetch and update exchange rates in Firefly III",
 	Long:  `Fetch exchange rates for specified currencies and update them in Firefly III.`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 
 		currencies := viper.GetStringSlice("currencies")
+
 		if len(currencies) < 2 {
-			fmt.Println("Please provide at least two currencies to fetch exchange rates.")
-			return
-		}
-		apiKey := viper.GetString("firefly.api_key")
-		if apiKey == "" {
-			fmt.Println("Firefly API key is not set. Please set it in the configuration.")
-			return
-		}
-		apiUrl := viper.GetString("firefly.api_url")
-		if apiUrl == "" {
-			fmt.Println("Firefly API URL is not set. Please set it in the configuration.")
-			return
+			return fmt.Errorf("please provide at least two currencies to fetch exchange rates")
 		}
 
-		exchangeApi := exchange.NewApi(currencies, date)
+		apiKey := viper.GetString("firefly.api_key")
+		if apiKey == "" {
+			return fmt.Errorf("firefly API key is not set")
+		}
+
+		apiUrl := viper.GetString("firefly.api_url")
+		if apiUrl == "" {
+			return fmt.Errorf("firefly API URL is not set")
+		}
+
+		exchangeApi := exchange.NewApi(currencies, viper.GetString("date"))
 		log.Printf("Fetching exchange rate for %s/%s", currencies[0], currencies[1])
 
 		fireflyApi := firefly.NewApi(firefly.ApiConfig{
@@ -78,10 +76,10 @@ var updateCmd = &cobra.Command{
 			}
 		}
 
+		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(updateCmd)
-	updateCmd.Flags().StringVarP(&date, "date", "d", "", "Date for the exchange rates in YYYY-MM-DD format (default is latest available)")
 }

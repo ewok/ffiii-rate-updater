@@ -26,7 +26,7 @@ import (
 )
 
 // const ExchangeRateByDateTemplate = "https://%s/v1/exchange-rates/by-date/%s"
-const ExchangeRateTemplate = "%s/v1/exchange-rates"
+const ExchangeRateTemplate = "%s/exchange-rates"
 
 type Api struct {
 	Config ApiConfig
