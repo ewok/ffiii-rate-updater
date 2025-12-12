@@ -54,7 +54,7 @@ The configuration file is optional.
 You can pass additional flags to specify currencies, Firefly API key, and firefly API URL directly from the command line:
 
 ```sh
-./ffiii-rate-updater init-config -d 2025-01-01 -c USD,EUR -k YOUR_API_KEY -u https://your-firefly-instance.com/api/
+./ffiii-rate-updater init-config -d 2025-01-01 -c USD,EUR -k YOUR_API_KEY -u https://your-firefly-instance.com/api/v1
 ```
 
 
