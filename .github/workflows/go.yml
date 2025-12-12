@@ -17,7 +17,6 @@ permissions:
 jobs:
   goreleaser:
     name: Build and Publish
-    needs: tests
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
