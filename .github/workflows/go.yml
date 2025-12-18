@@ -1,8 +1,8 @@
 name: goreleaser
 
 on:
-  pull_request:
-    types: [opened, synchronize]
+  # pull_request:
+  #   types: [opened, synchronize]
   push:
     branches: [main]
     tags:
