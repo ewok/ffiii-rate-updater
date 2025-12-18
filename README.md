@@ -102,11 +102,11 @@ You can also specify currencies, API key, and API URL directly when initializing
 
 ## Planning
 
-- Migrate to Batch API for updating rates.
-- Implement fallback configuration for fetching exchange rates from alternative sources.
-- Add Docker and docker-compose support for easier deployment.
-- Enhance error handling and logging.
-- Add tests for better reliability.
+- [x] Migrate to Batch API for updating rates.
+- [ ] Implement fallback configuration for fetching exchange rates from alternative sources.
+- [ ] Add Docker and docker-compose support for easier deployment.
+- [ ] Enhance error handling and logging.
+- [ ] Add tests for better reliability.
 
 ## License
 
