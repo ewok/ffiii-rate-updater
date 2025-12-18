@@ -60,23 +60,34 @@ var updateCmd = &cobra.Command{
 			TimeoutSeconds: 10,
 		})
 
-		// Send all exchange variants between the provided currencies
+		// Send exchange rates as batch
 		for i := range currencies {
+			fromCurrency := currencies[i]
+			rates := make(map[string]float64)
+			date := ""
+
 			for j := range currencies {
 				if i != j {
-					rate, err := exchangeApi.GetRate(currencies[i], currencies[j])
+					toCurrency := currencies[j]
+					rate, err := exchangeApi.GetRate(fromCurrency, toCurrency)
 					if err != nil {
-						log.Printf("Error fetching rate for %s/%s: %v", currencies[i], currencies[j], err)
+						log.Printf("Error fetching rate for %s/%s: %v", fromCurrency, toCurrency, err)
 						continue
 					}
-
-					err = fireflyApi.SendExchangeRates(rate.Value, currencies[i], currencies[j], rate.Date)
-					if err != nil {
-						log.Printf("Error sending rate for %s/%s: %v", currencies[i], currencies[j], err)
+					rates[toCurrency] = rate.Value
+					// if not set yet, set the date
+					if date == "" {
+						date = rate.Date
 					}
-					log.Printf("Sent exchange rate for %s/%s: %.6f on %s", currencies[i], currencies[j], rate.Value, rate.Date)
 				}
 			}
+
+			err = fireflyApi.SendExchangeRateByDate(fromCurrency, rates, date)
+			if err != nil {
+				log.Printf("Error sending batch rates for %s: %v", fromCurrency, err)
+				break
+			}
+			log.Printf("Sent batch exchange rates for %s on %s", fromCurrency, date)
 		}
 
 		return nil
